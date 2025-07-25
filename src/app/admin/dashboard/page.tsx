@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { Table, Tag } from 'antd';
 import { useAuth } from '@/zustand/store';
 import dayjs from 'dayjs';
+import type { ColumnsType } from 'antd/es/table';
+
 
 export default function Dashboard() {
   const { token } = useAuth();
@@ -21,7 +23,7 @@ export default function Dashboard() {
     fetchData();
   }, [token]);
 
-  const columns = [
+  const columns: ColumnsType<any> = [
     {
       title: 'Email',
       dataIndex: 'email',
@@ -30,7 +32,7 @@ export default function Dashboard() {
     ...dates.map((d) => ({
       title: d,
       dataIndex: d,
-      render: (present: boolean) => present ? '✓' : <Tag color="red">X</Tag>,
+      render: (present: boolean) => (present ? '✓' : <Tag color="red">X</Tag>),
     })),
     {
       title: 'Số buổi vắng',

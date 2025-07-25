@@ -10,12 +10,12 @@ export async function GET(req: NextRequest) {
 
     const users = await prisma.user.findMany({
         where: { role: 'USER' },
-        include: { attendances: true },
+        include: { attendance: true },
     });
 
     const uniqueDates = Array.from(
         new Set(
-            users.flatMap((u) => u.attendances.map((a) => dayjs(a.date).format('YYYY-MM-DD')))
+            users.flatMap((u) => u.attendance.map((a) => dayjs(a.date).format('YYYY-MM-DD')))
         )
     ).sort();
 
@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
         const row: any = { email: u.email };
         let absentCount = 0;
         uniqueDates.forEach((date) => {
-            const att = u.attendances.find((a) => dayjs(a.date).format('YYYY-MM-DD') === date);
+            const att = u.attendance.find((a) => dayjs(a.date).format('YYYY-MM-DD') === date);
             const present = att?.present || false;
             row[date] = present;
             if (!present) absentCount++;

@@ -15,14 +15,15 @@ datasource db {
 }
 
 model User {
-  id             String       @id @default(uuid())
-  name           String
-  studentId      String       @unique
-  email          String       @unique
-  imageUrl       String?
-  role           Role         @default(USER)
-  attendance     Attendance[]
-  telegramChatId String?
+  id         String       @id @default(uuid())
+  name       String?
+  studentId  String?      @unique
+  email      String       @unique
+  password   String
+  imageUrl   String?
+  role       Role         @default(USER)
+  attendance Attendance[]
+  telegramId String?
 }
 
 model Attendance {
