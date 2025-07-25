@@ -1,6 +1,6 @@
 export async function sendTelegramMessage(chatId: string, message: string) {
     const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-    const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
+    const url = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
 
     await fetch(url, {
         method: "POST",
