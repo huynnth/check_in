@@ -20,7 +20,11 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 403 });
     }
 
-    const { email, password, role } = await req.json();
+    const { name, email, password, role } = await req.json();  // 
+
+    if (!name || !email || !password || !role) {
+        return NextResponse.json({ error: 'Thiếu thông tin người dùng' }, { status: 400 });
+    }
 
     const exists = await prisma.user.findUnique({ where: { email } });
     if (exists) {
@@ -30,7 +34,7 @@ export async function POST(req: NextRequest) {
     const hash = await bcrypt.hash(password, 10);
 
     const newUser = await prisma.user.create({
-        data: { email, password: hash, role },
+        data: { name, email, password: hash, role }, // 
     });
 
     return NextResponse.json({ id: newUser.id });

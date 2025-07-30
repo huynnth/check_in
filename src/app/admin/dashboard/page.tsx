@@ -25,8 +25,18 @@ export default function Dashboard() {
 
   const columns: ColumnsType<any> = [
     {
+      title: 'Họ Tên',
+      dataIndex: 'name',
+      fixed: 'left',
+    },
+    {
       title: 'Email',
       dataIndex: 'email',
+      fixed: 'left',
+    },
+    {
+      title: 'Số buổi vắng',
+      dataIndex: 'absentCount',
       fixed: 'left',
     },
     ...dates.map((d) => ({
@@ -34,10 +44,6 @@ export default function Dashboard() {
       dataIndex: d,
       render: (present: boolean) => (present ? '✓' : <Tag color="red">X</Tag>),
     })),
-    {
-      title: 'Số buổi vắng',
-      dataIndex: 'absentCount',
-    },
   ];
 
   return <Table columns={columns} dataSource={data} rowKey="email" scroll={{ x: true }} />;

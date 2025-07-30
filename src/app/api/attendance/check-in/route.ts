@@ -16,8 +16,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     const user = await prisma.user.findUnique({ where: { id: userId } });
-    if (user?.telegramChatId) {
-      await sendTelegramMessage(user.telegramChatId, "Bạn đã điểm danh thành công.");
+    if (user?.telegramId) {
+      await sendTelegramMessage(user.telegramId, "Bạn đã điểm danh thành công.");
     }
 
     res.status(200).json({ message: "Checked in" });

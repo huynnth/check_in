@@ -20,7 +20,10 @@ export async function GET(req: NextRequest) {
     ).sort();
 
     const formatted = users.map((u) => {
-        const row: any = { email: u.email };
+        const row: any = {
+            email: u.email,
+            name: u.name,
+        };
         let absentCount = 0;
         uniqueDates.forEach((date) => {
             const att = u.attendance.find((a) => dayjs(a.date).format('YYYY-MM-DD') === date);
@@ -31,6 +34,7 @@ export async function GET(req: NextRequest) {
         row.absentCount = absentCount;
         return row;
     });
+
 
     return NextResponse.json({ users: formatted, dates: uniqueDates });
 }

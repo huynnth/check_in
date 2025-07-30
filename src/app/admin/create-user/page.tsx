@@ -4,10 +4,13 @@ import { useState } from 'react';
 import { Button, Form, Input, Select, message } from 'antd';
 import axios from 'axios';
 import { useAuth } from '@/zustand/store';
+import { useRouter } from 'next/navigation';
 
 export default function CreateUserPage() {
     const { token } = useAuth();
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
+
 
     const onFinish = async (values: any) => {
         setLoading(true);
@@ -15,9 +18,14 @@ export default function CreateUserPage() {
             await axios.post('/api/admin/create-user', values, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            message.success('Tạo user thành công');
+            message.success('✅ Tạo user thành công');
+
+
+            setTimeout(() => {
+                router.push('/admin/dashboard'); // 
+            }, 1000);
         } catch (err: any) {
-            message.error(err.response?.data?.error || 'Lỗi không xác định');
+            message.error(err.response?.data?.error || '❌ Lỗi không xác định');
         } finally {
             setLoading(false);
         }
@@ -26,6 +34,16 @@ export default function CreateUserPage() {
     return (
         <div className="max-w-md mx-auto mt-10">
             <Form layout="vertical" onFinish={onFinish}>
+
+                <Form.Item
+                    name="name"
+                    label="Họ Tên"
+                    rules={[{ required: true, message: 'Vui lòng nhập họ và tên' }]}
+                >
+                    <Input />
+                </Form.Item>
+
+
                 <Form.Item
                     name="email"
                     label="Email"

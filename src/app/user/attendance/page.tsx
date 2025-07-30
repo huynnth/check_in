@@ -11,7 +11,7 @@ export default function AttendancePage() {
     const handleMarkAttendance = async () => {
         setLoading(true);
         try {
-            await axios.post('/api/attendance/mark', {}, {
+            await axios.post('/api/attendance/check-in', {}, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             message.success('Điểm danh thành công!');
