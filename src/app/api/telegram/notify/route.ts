@@ -8,7 +8,7 @@ export async function POST() {
     const users = await prisma.user.findMany({
         where: { role: 'USER' },
         include: {
-            attendances: {
+            attendance: {
                 where: { date: today },
             },
         },
@@ -16,7 +16,7 @@ export async function POST() {
 
     for (const user of users) {
         if (!user.telegramId) continue;
-        const markedToday = user.attendances.some((a) => a.present);
+        const markedToday = user.attendance.some((a) => a.present);
         if (!markedToday) {
             await axios.post(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`, {
                 chat_id: user.telegramId,
