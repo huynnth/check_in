@@ -3,6 +3,7 @@ import { useAuth } from '@/zustand/store';
 import axios from 'axios';
 import { Button, message } from 'antd';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 export default function AttendancePage() {
     const { token } = useAuth();
@@ -14,9 +15,9 @@ export default function AttendancePage() {
             await axios.post('/api/attendance/check-in', {}, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            message.success('Điểm danh thành công!');
+            toast.success('Điểm danh thành công!');
         } catch (err: any) {
-            message.error(err.response?.data?.error || 'Lỗi không xác định');
+            toast.error(err.response?.data?.error || 'Lỗi không xác định');
         } finally {
             setLoading(false);
         }

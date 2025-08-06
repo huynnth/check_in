@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
 
     const uniqueDates = Array.from(
         new Set(
-            users.flatMap((u) => u.attendance.map((a) => dayjs(a.date).format('YYYY-MM-DD')))
+            users.flatMap((u) => u.attendance.map((a) => dayjs(a.date).format('DD-MM-YYYY')))
         )
     ).sort();
 
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
         };
         let absentCount = 0;
         uniqueDates.forEach((date) => {
-            const att = u.attendance.find((a) => dayjs(a.date).format('YYYY-MM-DD') === date);
+            const att = u.attendance.find((a) => dayjs(a.date).format('DD-MM-YYYY') === date);
             const present = att?.present || false;
             row[date] = present;
             if (!present) absentCount++;
