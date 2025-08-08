@@ -21,6 +21,7 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "next": "15.4.1",
+    "next-auth": "^4.24.11",
     "node-fetch": "^3.3.2",
     "node-telegram-bot-api": "^0.66.0",
     "prisma": "^6.12.0",

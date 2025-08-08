@@ -18,19 +18,18 @@ export default function CreateUserPage() {
             await axios.post('/api/admin/create-user', values, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            message.success('✅ Tạo user thành công');
-
+            message.success('Tạo user thành công');
 
             setTimeout(() => {
-                router.push('/admin/dashboard'); // 
+                router.push('/admin/dashboard');
             }, 1000);
         } catch (err: any) {
-            message.error(err.response?.data?.error || '❌ Lỗi không xác định');
+            const errorMessage = err.response?.data?.error || 'Đã xảy ra lỗi không xác định';
+            message.error(errorMessage);
         } finally {
             setLoading(false);
         }
     };
-
     return (
         <div className="max-w-md mx-auto mt-10">
             <Form layout="vertical" onFinish={onFinish}>
@@ -43,6 +42,14 @@ export default function CreateUserPage() {
                     <Input />
                 </Form.Item>
 
+
+                <Form.Item
+                    name="mssv"
+                    label="Mã số sinh viên"
+                    rules={[{ required: true, message: 'Vui lòng nhập mã số sinh viên' }]}
+                >
+                    <Input />
+                </Form.Item>
 
                 <Form.Item
                     name="email"
@@ -59,6 +66,7 @@ export default function CreateUserPage() {
                 >
                     <Input.Password />
                 </Form.Item>
+
 
                 <Form.Item
                     name="role"

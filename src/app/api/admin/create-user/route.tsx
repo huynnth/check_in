@@ -20,9 +20,9 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 403 });
     }
 
-    const { name, email, password, role } = await req.json();  // 
+    const { name, mssv, email, password, role } = await req.json();
 
-    if (!name || !email || !password || !role) {
+    if (!name || !mssv || !email || !password || !role) {
         return NextResponse.json({ error: 'Thiếu thông tin người dùng' }, { status: 400 });
     }
 
@@ -31,10 +31,16 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Email đã tồn tại' }, { status: 400 });
     }
 
+
+    const ex = await prisma.user.findUnique({ where: { mssv } });
+    if (ex) {
+        return NextResponse.json({ error: 'Mã số sinh viên đã tồn tại' }, { status: 400 });
+    }
+
     const hash = await bcrypt.hash(password, 10);
 
     const newUser = await prisma.user.create({
-        data: { name, email, password: hash, role }, // 
+        data: { name, mssv, email, password: hash, role },
     });
 
     return NextResponse.json({ id: newUser.id });

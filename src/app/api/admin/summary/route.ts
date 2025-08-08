@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
         const row: any = {
             email: u.email,
             name: u.name,
+            mssv: u.mssv
         };
         let absentCount = 0;
         uniqueDates.forEach((date) => {

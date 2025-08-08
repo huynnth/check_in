@@ -23,7 +23,9 @@ model User {
   imageUrl   String?
   role       Role         @default(USER)
   attendance Attendance[]
-  telegramId String?
+  telegramId String?      @unique
+  chatId     String?
+  mssv       String?      @unique
 }
 
 model Attendance {

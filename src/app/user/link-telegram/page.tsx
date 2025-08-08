@@ -1,32 +1,65 @@
 'use client';
+
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
-import { Button, Input, message } from 'antd';
-import axios from 'axios';
-import { useAuth } from '@/zustand/store';
+import { Button, Typography, message, Space } from 'antd';
 
-export default function LinkTelegram() {
-    const { token } = useAuth();
-    const [telegramId, setTelegramId] = useState('');
-    const [loading, setLoading] = useState(false);
+const { Title, Paragraph, Text } = Typography;
 
-    const handleSubmit = async () => {
-        setLoading(true);
+export default function LinkTelegramPage() {
+    const searchParams = useSearchParams();
+    const telegramId = searchParams.get('telegramId');
+    const chatId = searchParams.get('chatId');
+
+    const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+    const [errorMsg, setErrorMsg] = useState('');
+
+    const handleLink = async () => {
         try {
-            await axios.post('/api/user/link-telegram', { telegramId }, {
-                headers: { Authorization: `Bearer ${token}` },
+            const res = await fetch('/api/telegram/link', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ telegramId, chatId }),
             });
-            message.success('Liên kết Telegram thành công');
-        } catch (err: any) {
-            message.error(err.response?.data?.error || 'Lỗi không xác định');
-        } finally {
-            setLoading(false);
+
+            const data = await res.json();
+            if (data.success) {
+                setStatus('success');
+                message.success(' Liên kết Telegram thành công!');
+            } else {
+                setStatus('error');
+                setErrorMsg(data.error || 'Lỗi không xác định');
+                message.error(` ${data.error || 'Không thể liên kết'}`);
+            }
+        } catch (err) {
+            setStatus('error');
+            setErrorMsg('Gặp lỗi khi gửi yêu cầu');
+            message.error(' Gặp lỗi khi kết nối máy chủ.');
         }
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen gap-4">
-            <Input placeholder="Nhập Telegram ID" value={telegramId} onChange={(e) => setTelegramId(e.target.value)} />
-            <Button type="primary" onClick={handleSubmit} loading={loading}>Liên kết</Button>
+        <div style={{ padding: 32, maxWidth: 480, margin: '0 auto' }}>
+            <Typography>
+                <Title level={3}>Liên kết Telegram</Title>
+                <Paragraph>
+                    Hãy nhấn nút bên dưới để xác nhận liên kết tài khoản Telegram của bạn.
+                </Paragraph>
+            </Typography>
+
+            <Space direction="vertical">
+                <Button type="primary" onClick={handleLink}>
+                    Xác nhận liên kết
+                </Button>
+
+                {status === 'success' && (
+                    <Text type="success"> Đã liên kết thành công.</Text>
+                )}
+                {status === 'error' && (
+                    <Text type="danger"> {errorMsg}</Text>
+                )}
+            </Space>
         </div>
     );
 }

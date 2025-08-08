@@ -15,7 +15,7 @@ export default function Dashboard() {
   const [data, setData] = useState<any[]>([]);
   const [dates, setDates] = useState<string[]>([]);
   const router = useRouter();
-  const text = <span>Đăng kí người dùng mới</span>;
+  const text = <span>Đăng kí sinh viên</span>;
 
   const [arrow, setArrow] = useState<'Show' | 'Hide' | 'Center'>('Show');
 
@@ -52,6 +52,11 @@ export default function Dashboard() {
     {
       title: 'Họ Tên',
       dataIndex: 'name',
+      fixed: 'left',
+    },
+    {
+      title: 'Mã số sinh viên',
+      dataIndex: 'mssv',
       fixed: 'left',
     },
     {

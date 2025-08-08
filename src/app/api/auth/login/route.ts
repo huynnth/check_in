@@ -12,14 +12,14 @@ export async function POST(req: NextRequest) {
 
     if (!user) {
         console.log('User not found');
-        return NextResponse.json({ error: 'Email not found' }, { status: 401 });
+        return NextResponse.json({ error: 'Email không tồn tại' }, { status: 401 });
     }
 
     const match = await bcrypt.compare(password, user.password);
     console.log('Password match:', match);
 
     if (!match) {
-        return NextResponse.json({ error: 'Wrong password' }, { status: 401 });
+        return NextResponse.json({ error: 'Sai mật khẩu' }, { status: 401 });
     }
 
     const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET!, {
